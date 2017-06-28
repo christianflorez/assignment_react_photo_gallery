@@ -1,43 +1,102 @@
 import React, { Component } from 'react';
-import Gallery from './Gallery';
 import Filterables from './Filterables';
+import Gallery from './Gallery';
+import Pagination from './Pagination';
 import DATA from '../photos';
 
 /*
   Header
-
-  FilterableGallery < state holder
-    Filterables
-      Filter by Filter...?
-      Sort by date posted
-      Search by term
-      Results Count
-    Gallery
-      Details (Filter, Likes, Comments)
-    Pagination
-      Forward
-      Back
-
-
-  To Do:
-
-  FIRSTLY, make pagination buttons
-  THEN, try to get searching via IgFilter to work
-  THEN, get results count to work
-  THEN, try to get pagination to work
-  THEN, get search bar and date sorter to work
+  Try to get pagination to work
   FINALLY, get IgDetails to sort
 */
 
 class FilterableGallery extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      igFilter: 'Normal',
+      dateSortDirection: 'Descending',
+      searchTerm: '',
+      page: 1,
+      category: '',
+    };
+
+    this.onChangeInput = this.onChangeInput.bind(this);
+    this.onDateClick = this.onDateClick.bind(this);
+    this.onSortableClick = this.onSortableClick.bind(this);
+    this.onIncrement = this.onIncrement.bind(this);
+    this.onDecrement = this.onDecrement.bind(this);
+  };
+
+  onChangeInput = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  };
+
+  onDateClick = (e) => {
+    e.preventDefault();
+    if (this.state.dateSortDirection === 'Descending') {
+      this.setState({
+        dateSortDirection: 'Ascending'
+      });
+    } else {
+      this.setState({
+        dateSortDirection: 'Descending'
+      });
+    }
+  };
+
+  onSortableClick = (e) => {
+    e.preventDefault();
+    let text = e.target.innerText;
+    let category = text.substring(0, text.indexOf(':'));
+    this.setState({
+      category
+    })
+  };
+
+  onIncrement = (e) => {
+    this.setState({
+      page: this.state.page + 1
+    })
+  };
+
+  onDecrement = (e) => {
+    if (this.state.page >= 2) {
+      this.setState({
+        page: this.state.page - 1
+      })
+    }
+  };
+
+
   render() {
     return(
       <div className="container">
         <div className="row">
           <h1>React Photo Gallery</h1>
         </div>
-        <Filterables />
-        <Gallery photos={DATA}/>
+        <Filterables 
+          onChangeInput={this.onChangeInput}
+          onDateClick={this.onDateClick}
+          dateSortDirection={this.state.dateSortDirection}
+          searchTerm={this.state.searchTerm}
+        />
+        <Gallery 
+          photos={DATA}
+          igFilter={this.state.igFilter}
+          onSortableClick={this.onSortableClick}
+          dateSortDirection={this.state.dateSortDirection}
+          searchTerm={this.state.searchTerm}
+          page={this.state.page}
+          category={this.state.category}
+        />
+        <Pagination 
+          onIncrement={this.onIncrement}
+          onDecrement={this.onDecrement}
+          page={this.state.page}
+        />
       </div>
     );
   }

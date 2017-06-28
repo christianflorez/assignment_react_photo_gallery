@@ -2,14 +2,15 @@ import React from 'react';
 import {getFilters} from '../helpers';
 import Select from './elements/Select';
 
-const IgFilters = ({photos}) => {
+const IgFilters = ({onChangeInput}) => {
   const filters = getFilters();
   return (
     <div className="form-group">
-      <label htmlFor="IgFilters">Instagram Filters</label>
+      <label htmlFor="igFilter">Instagram Filters</label>
       <Select
-        name="IgFilters"
+        name="igFilter"
         options={filters}
+        onChange={onChangeInput}
       />
     </div>
   );
