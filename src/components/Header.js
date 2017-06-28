@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const HeaderBrand = () => {
   return (
@@ -7,7 +7,6 @@ const HeaderBrand = () => {
     </div>
   );
 };
-
 
 const Header = () => {
   return (

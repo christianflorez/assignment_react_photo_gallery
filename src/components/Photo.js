@@ -1,16 +1,16 @@
-import React from 'react';
-import IgDetail from './elements/IgDetail';
-import IgSortable from './IgSortable';
-import {dateParser, tagParser, parseCaption} from '../helpers';
+import React from "react";
+import PhotoDetail from "./PhotoDetail";
+import SortableDetail from "./SortableDetail";
+import { dateParser, tagParser, parseCaption } from "../helpers";
 
-const Photo = (props) => {
+const Photo = props => {
   const {
-    src, 
-    user, 
-    date, 
-    likes, 
-    comments, 
-    photoUrl, 
+    src,
+    user,
+    date,
+    likes,
+    comments,
+    photoUrl,
     userUrl,
     filter,
     tags,
@@ -25,18 +25,22 @@ const Photo = (props) => {
     <div className="col-md-4">
       <div className="col-md-12 well photos">
         <a href={photoUrl}>
-          <img className="img-responsive" src={src} alt=""/>
+          <img className="img-responsive" src={src} alt="" />
         </a>
-        <IgDetail label="Posted By" data={<a href={userUrl}>{user}</a>} />
-        <IgDetail label="Date" data={parsedDate} />
-        <IgSortable label="Likes" data={likes} onClick={onSortableClick}/>
-        <IgSortable label="Comments" data={comments} onClick={onSortableClick}/>
-        <IgDetail label="Filter" data={filter} />
-        <IgDetail label="Tags" data={parsedTags} />
-        <IgDetail label="Caption" data={parsedCaption} />
+        <PhotoDetail label="Posted By" data={<a href={userUrl}>{user}</a>} />
+        <PhotoDetail label="Date" data={parsedDate} />
+        <SortableDetail label="Likes" data={likes} onClick={onSortableClick} />
+        <SortableDetail
+          label="Comments"
+          data={comments}
+          onClick={onSortableClick}
+        />
+        <PhotoDetail label="Filter" data={filter} />
+        <PhotoDetail label="Tags" data={parsedTags} />
+        <PhotoDetail label="Caption" data={parsedCaption} />
       </div>
     </div>
-  )
+  );
 };
 
 export default Photo;

@@ -1,29 +1,30 @@
-import React, { Component } from 'react';
-import Photo from './Photo';
+import React, { Component } from "react";
+import Photo from "./Photo";
 import {
-  parseByIgFilter, 
+  parseByIgFilter,
   sortPhotosByDate,
   parseBySearchTerm,
   paginatePhotos,
   sortPhotosByCategory
-} from '../helpers';
+} from "../helpers";
+const ITEMS_PER_PAGE = 6;
 
 class Gallery extends Component {
   render() {
     const {
-      igFilter, 
-      dateSortDirection, 
-      searchTerm, 
+      igFilter,
+      dateSortDirection,
+      searchTerm,
       page,
       onSortableClick,
       category
     } = this.props;
-    let {photos} = this.props;
+    let { photos } = this.props;
     photos = parseByIgFilter(photos, igFilter);
     photos = parseBySearchTerm(photos, searchTerm);
     photos = sortPhotosByDate(photos, dateSortDirection);
     photos = sortPhotosByCategory(photos, category);
-    photos = paginatePhotos(photos, page);
+    photos = paginatePhotos(photos, page, ITEMS_PER_PAGE);
     let resultsCount = photos.length;
 
     const photoElements = photos.map(photo => {
@@ -34,7 +35,7 @@ class Gallery extends Component {
         caption = "";
       }
       return (
-        <Photo 
+        <Photo
           key={photo.id}
           src={photo.images.standard_resolution.url}
           user={photo.user.username}
@@ -48,15 +49,15 @@ class Gallery extends Component {
           userUrl={`https://instagram.com/${photo.user.username}`}
           onSortableClick={onSortableClick}
         />
-      )
+      );
     });
-    return(
+    return (
       <div className="row">
         <h4>Results: {resultsCount}</h4>
         {photoElements}
       </div>
     );
   }
-};
+}
 
 export default Gallery;

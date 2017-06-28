@@ -1,17 +1,22 @@
-import PHOTO_DATA from '../photos';
-const ITEMS_PER_PAGE = 6;
+import PHOTO_DATA from "../photos";
 
 export function dateParser(dateInUnixTime) {
   return new Date(dateInUnixTime * 1000).toLocaleString();
-};
+}
 
 export function tagParser(tags) {
   if (tags.length === 0) {
     return "None";
   }
 
-  return `#${tags.join(' #')}`;
-};
+  return `#${tags.join(" #")}`;
+}
+
+export function parseCaption(caption) {
+  if (caption.length > 100) {
+    return caption.slice(0, 100) + "...";
+  }
+}
 
 export function getFilters() {
   let filtersSet = new Set();
@@ -20,7 +25,7 @@ export function getFilters() {
   });
 
   return Array.from(filtersSet);
-};
+}
 
 export function parseByIgFilter(photos, igFilter) {
   let results = [];
@@ -31,7 +36,27 @@ export function parseByIgFilter(photos, igFilter) {
   });
 
   return results;
-};
+}
+
+export function parseBySearchTerm(photos, searchTerm) {
+  if (!searchTerm) {
+    return photos;
+  }
+  let results = [];
+  photos.forEach(photo => {
+    let isSearchInUsername = photo.user.username.indexOf(searchTerm) >= 0;
+    let isSearchInCaption =
+      photo.caption &&
+      photo.caption.text &&
+      photo.caption.text.indexOf(searchTerm) >= 0;
+
+    if (isSearchInCaption || isSearchInUsername) {
+      results.push(photo);
+    }
+  });
+
+  return results;
+}
 
 export function sortPhotosByDate(photos, direction) {
   if (photos.length === 0) {
@@ -43,11 +68,11 @@ export function sortPhotosByDate(photos, direction) {
       return b.created_time - a.created_time;
     });
   } else if (direction === "Descending") {
-  return photos.sort((a, b) => {
+    return photos.sort((a, b) => {
       return a.created_time - b.created_time;
     });
   }
-};
+}
 
 export function sortPhotosByCategory(photos, category) {
   if (!category) {
@@ -63,41 +88,15 @@ export function sortPhotosByCategory(photos, category) {
   } else {
     return photos;
   }
-};
+}
 
-export function parseBySearchTerm(photos, searchTerm) {
-  if (!searchTerm) {
-    return photos;
-  }
-  let results = [];
-  photos.forEach(photo => {
-    let isSearchInUsername = photo.user.username.indexOf(searchTerm) >= 0;
-    let isSearchInCaption = photo.caption && 
-      photo.caption.text &&
-      photo.caption.text.indexOf(searchTerm) >= 0;
-
-    if (isSearchInCaption || isSearchInUsername) {
-      results.push(photo);
-    }
-  });
-
-  return results;
-};
-
-
-export function paginatePhotos(photos, page) {
+export function paginatePhotos(photos, page, itemsPerPage) {
   if (page === 1) {
-    return photos.slice(0, ITEMS_PER_PAGE);
+    return photos.slice(0, itemsPerPage);
   }
 
-  let start = (page - 1) * ITEMS_PER_PAGE + 1;
-  let end = page * ITEMS_PER_PAGE + 1;
+  let start = (page - 1) * itemsPerPage + 1;
+  let end = page * itemsPerPage + 1;
 
   return photos.slice(start, end);
-};
-
-export function parseCaption(caption) {
-  if (caption.length > 100) {
-    return caption.slice(0, 100) + "...";
-  }
-};
+}

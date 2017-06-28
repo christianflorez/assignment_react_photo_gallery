@@ -1,89 +1,76 @@
-import React, { Component } from 'react';
-import Filterables from './Filterables';
-import Gallery from './Gallery';
-import Pagination from './Pagination';
-import DATA from '../photos';
-
-/*
-  Header
-  Try to get pagination to work
-  FINALLY, get IgDetails to sort
-*/
+import React, { Component } from "react";
+import Filterables from "./Filterables";
+import Gallery from "./Gallery";
+import Pagination from "./Pagination";
+import DATA from "../photos";
 
 class FilterableGallery extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      igFilter: 'Normal',
-      dateSortDirection: 'Descending',
-      searchTerm: '',
+      igFilter: "Normal",
+      dateSortDirection: "Descending",
+      searchTerm: "",
       page: 1,
-      category: '',
+      category: ""
     };
+  }
 
-    this.onChangeInput = this.onChangeInput.bind(this);
-    this.onDateClick = this.onDateClick.bind(this);
-    this.onSortableClick = this.onSortableClick.bind(this);
-    this.onIncrement = this.onIncrement.bind(this);
-    this.onDecrement = this.onDecrement.bind(this);
-  };
-
-  onChangeInput = (e) => {
+  onChangeInput = e => {
     this.setState({
       [e.target.name]: e.target.value
-    })
+    });
   };
 
-  onDateClick = (e) => {
+  onDateClick = e => {
     e.preventDefault();
-    if (this.state.dateSortDirection === 'Descending') {
+    if (this.state.dateSortDirection === "Descending") {
       this.setState({
-        dateSortDirection: 'Ascending'
+        dateSortDirection: "Ascending"
       });
     } else {
       this.setState({
-        dateSortDirection: 'Descending'
+        dateSortDirection: "Descending"
       });
     }
   };
 
-  onSortableClick = (e) => {
+  onSortableClick = e => {
     e.preventDefault();
     let text = e.target.innerText;
-    let category = text.substring(0, text.indexOf(':'));
+    let category = text.substring(0, text.indexOf(":"));
     this.setState({
       category
-    })
+    });
   };
 
-  onIncrement = (e) => {
+  onIncrement = e => {
     this.setState({
       page: this.state.page + 1
-    })
+    });
   };
 
-  onDecrement = (e) => {
+  onDecrement = e => {
     if (this.state.page >= 2) {
       this.setState({
         page: this.state.page - 1
-      })
+      });
     }
   };
 
-
   render() {
-    return(
+    return (
       <div className="container">
         <div className="row">
           <h1>React Photo Gallery</h1>
         </div>
-        <Filterables 
+        <Filterables
           onChangeInput={this.onChangeInput}
           onDateClick={this.onDateClick}
           dateSortDirection={this.state.dateSortDirection}
           searchTerm={this.state.searchTerm}
         />
-        <Gallery 
+        <Gallery
           photos={DATA}
           igFilter={this.state.igFilter}
           onSortableClick={this.onSortableClick}
@@ -92,7 +79,7 @@ class FilterableGallery extends Component {
           page={this.state.page}
           category={this.state.category}
         />
-        <Pagination 
+        <Pagination
           onIncrement={this.onIncrement}
           onDecrement={this.onDecrement}
           page={this.state.page}
